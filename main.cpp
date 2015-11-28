@@ -5,6 +5,8 @@
 
 using namespace std;
 
+//TODO: Don't forget to add AVG Waiting Time: ______
+
 typedef enum {
     SJF,
     RR,
@@ -20,9 +22,9 @@ typedef enum {
     int priority;
 };
 void runSjfScheduler(int numOfProcesses, int maxNumOfProcesses, const processInfo *process);
-
-
 void runRRScheduler(int numOfProcesses, int maxNumOfProcesses, const processInfo *process, const int timeQuantam);
+
+void runPRNoPreempScheduler(int numOfProcesses, int maxNumOfProcesses, const processInfo *process);
 
 int main() {
 
@@ -95,10 +97,42 @@ int main() {
         if(algType == ::SJF){
         runSjfScheduler(numOfProcesses, maxNumOfProcesses, process);}
         else if(algType == ::RR) {
-            runRRScheduler(numOfProcesses, maxNumOfProcesses, process, timeQuantam);
+            runRRScheduler(numOfProcesses, maxNumOfProcesses, process, timeQuantam); }
+        else if (algType == ::PR_noPREMP){
+            runPRNoPreempScheduler(numOfProcesses, maxNumOfProcesses, process);
         } else {
 
+            numOfProcesses = 0;
+            int curTime = 0;
+            cout << "Max number of processes is: " << maxNumOfProcesses << endl;
+            priority_queue<processInfo*,vector<processInfo*>,function
+                    <bool(const processInfo*,const processInfo*)>>
+                    prQueuePR([](const processInfo* s1, const processInfo* s2)
+                              {return s1->priority >s2->priority;});
 
+            while(numOfProcesses < maxNumOfProcesses){
+                prQueuePR.push((processInfo*)(&process[numOfProcesses]));
+                if(numOfProcesses != maxNumOfProcesses - 1) {    // Don't compare the last element
+                    int pivot = curTime + process[numOfProcesses].cpuBurst;
+                    if (process[numOfProcesses + 1].timeArrive > pivot) {
+                        processInfo *info = prQueuePR.top();
+                        prQueuePR.pop();
+                        cout << curTime << " " << info->number << endl;
+                        curTime += info->cpuBurst;
+                    } else {
+                        processInfo *info = prQueuePR.top();
+                        info->cpuBurst - process[numOfProcesses + 1].timeArrive;
+                        cout << curTime << " " << info->number << endl;
+                        curTime += process[numOfProcesses + 1].timeArrive;
+                    }
+                }
+                numOfProcesses++;
+            }
+            while(!prQueuePR.empty()){
+                processInfo *info = prQueuePR.top();    prQueuePR.pop();
+                cout << curTime << " " << info->number << endl;
+                curTime += info->cpuBurst;
+            }
 
 
         }
@@ -163,6 +197,34 @@ int main() {
 
 
     return 0;
+}
+
+void runPRNoPreempScheduler(int numOfProcesses, int maxNumOfProcesses, const processInfo *process) {
+    numOfProcesses = 0;
+    int curTime = 0;
+    cout << "Max number of processes is: " << maxNumOfProcesses << endl;
+    priority_queue<processInfo*,vector<processInfo*>,function
+                    <bool(const processInfo*,const processInfo*)>>
+                    prQueuePR([](const processInfo* s1, const processInfo* s2)
+                               {return s1->priority >s2->priority;});
+
+    while(numOfProcesses < maxNumOfProcesses){
+                prQueuePR.push((processInfo*)(&process[numOfProcesses]));
+                if(numOfProcesses != maxNumOfProcesses - 1) {    // Don't compare the last element
+                    if (process[numOfProcesses + 1].timeArrive > curTime) {
+                        processInfo *info = prQueuePR.top();
+                        prQueuePR.pop();
+                        cout << curTime << " " << info->number << endl;
+                        curTime += info->cpuBurst;
+                    }
+                }
+                numOfProcesses++;
+            }
+    while(!prQueuePR.empty()){
+                processInfo *info = prQueuePR.top();    prQueuePR.pop();
+                cout << curTime << " " << info->number << endl;
+                curTime += info->cpuBurst;
+            }
 }
 
 void runRRScheduler(int numOfProcesses, int maxNumOfProcesses, const processInfo *process, const int timeQuantam) {
