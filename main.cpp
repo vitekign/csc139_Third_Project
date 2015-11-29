@@ -108,22 +108,23 @@ int main() {
             priority_queue<processInfo*,vector<processInfo*>,function
                     <bool(const processInfo*,const processInfo*)>>
                     prQueuePR([](const processInfo* s1, const processInfo* s2)
-                              {return s1->priority >s2->priority;});
+                              {return s1->priority > s2->priority;});
 
             while(numOfProcesses < maxNumOfProcesses){
                 prQueuePR.push((processInfo*)(&process[numOfProcesses]));
                 if(numOfProcesses != maxNumOfProcesses - 1) {    // Don't compare the last element
-                    int pivot = curTime + process[numOfProcesses].cpuBurst;
-                    if (process[numOfProcesses + 1].timeArrive > pivot) {
-                        processInfo *info = prQueuePR.top();
-                        prQueuePR.pop();
+                    processInfo *info = prQueuePR.top();
+
+                    int timeOffset = curTime + info->cpuBurst;
+                    if(timeOffset < process[numOfProcesses+1].timeArrive){ // <= ???
                         cout << curTime << " " << info->number << endl;
                         curTime += info->cpuBurst;
-                    } else {
+                        prQueuePR.pop();
+                    }else {
                         processInfo *info = prQueuePR.top();
-                        info->cpuBurst - process[numOfProcesses + 1].timeArrive;
+                        info->cpuBurst -= process[numOfProcesses + 1].timeArrive - curTime;
                         cout << curTime << " " << info->number << endl;
-                        curTime += process[numOfProcesses + 1].timeArrive;
+                        curTime += process[numOfProcesses + 1].timeArrive - curTime;
                     }
                 }
                 numOfProcesses++;
@@ -133,11 +134,7 @@ int main() {
                 cout << curTime << " " << info->number << endl;
                 curTime += info->cpuBurst;
             }
-
-
         }
-
-
         delete [] process;
     }
 
