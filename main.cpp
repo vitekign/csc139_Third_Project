@@ -109,7 +109,7 @@ int main() {
                     <bool(const processInfo*,const processInfo*)>>
                     prQueuePR([](const processInfo* s1, const processInfo* s2)
                               {return s1->priority > s2->priority;});
-
+//TODO: When does it get preempted, every time or only if a next process' priority is higher?
             while(numOfProcesses < maxNumOfProcesses){
                 prQueuePR.push((processInfo*)(&process[numOfProcesses]));
                 if(numOfProcesses != maxNumOfProcesses - 1) {    // Don't compare the last element
