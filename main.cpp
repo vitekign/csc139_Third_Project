@@ -37,6 +37,7 @@ int main() {
     int const timeQuantam = 4;
     int avg_time = 0;
 
+    int ALG_TYPE[4];
 
 
       if(!outf){
@@ -51,21 +52,29 @@ int main() {
         cerr <<"input.txt cound not be opened for reading!"<< endl;
         exit(1);
     }
-    string strInput;
-    while( getline(inf, strInput)){
 
-        stringstream strStream;
 
-        if(strInput.compare("SJF") == 0){
-            algType = ::SJF;
-        } else if (strInput.compare("RR") == 0){
-            algType = ::RR;
-        } else if (strInput.compare("PR_noPREMP") == 0){
-            algType = ::PR_noPREMP;
-        } else if(strInput.compare("PR_withPREMP") == 0){
-            algType = ::PR_withPREMP;
+        string strInput;
+        stringstream sch_algorithms;
+        getline(inf, strInput);
+        sch_algorithms << strInput;
+
+        int temp = 0;
+        while(sch_algorithms >> strInput){
+            if(strInput.compare("SJF") == 0){
+                ALG_TYPE[temp] = ::SJF;
+            } else if (strInput.compare("RR") == 0){
+                ALG_TYPE[temp] = ::RR;
+            } else if (strInput.compare("PR_noPREMP") == 0){
+                ALG_TYPE[temp] = ::PR_noPREMP;
+            } else if(strInput.compare("PR_withPREMP") == 0){
+                ALG_TYPE[temp] = ::PR_withPREMP;
+            }
+            temp++;
         }
 
+
+    stringstream strStream;
 
 
 
@@ -106,12 +115,14 @@ int main() {
             cout << endl;
          }
 
-        printAlgorithmName(algType);
-        if(algType == ::SJF){
+    for(int i = 0; i < 4; i++){
+
+        printAlgorithmName(ALG_TYPE[i]);
+        if(ALG_TYPE[i] == ::SJF){
         runSjfScheduler(numOfProcesses, maxNumOfProcesses, process);}
-        else if(algType == ::RR) {
+        else if(ALG_TYPE[i] == ::RR) {
             runRRScheduler(numOfProcesses, maxNumOfProcesses, process, timeQuantam); }
-        else if (algType == ::PR_noPREMP){
+        else if (ALG_TYPE[i] == ::PR_noPREMP){
             runPRNoPreempScheduler(numOfProcesses, maxNumOfProcesses, process);
         } else {
 
@@ -191,10 +202,6 @@ int main() {
             //cout << "AVG Waiting Time: " << (float)total_time / maxNumOfProcesses << endl << endl << endl;
             outf << "AVG Waiting Time: " << (float)total_time / maxNumOfProcesses << endl << endl << endl;
         }
-
-
-
-        delete [] process;
     }
 
 
@@ -372,7 +379,7 @@ void runSjfScheduler(int numOfProcesses, int maxNumOfProcesses, const processInf
         }
 
     //cout << "AVG Waiting Time: " << (float)total_time /  numOfProcesses << endl << endl << endl;
-    outf << "AVG Waiting Time: " << (float)total_time /  numOfProcesses << endl << endl << endl;
+    outf << "AVG Waiting Time: " << (float)total_time /  maxNumOfProcesses << endl << endl << endl;
 
 
 }
