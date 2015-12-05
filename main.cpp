@@ -25,6 +25,8 @@ void runRRScheduler(int numOfProcesses, int maxNumOfProcesses, const processInfo
 void runPRNoPreempScheduler(int numOfProcesses, int maxNumOfProcesses, const processInfo *process);
 void printAlgorithmName(int algType);
 
+int runPR_withPREEMPSchedulingAlg(int numOfProcesses, int maxNumOfProcesses, const processInfo *process);
+
 ofstream outf("output.txt");
 
 
@@ -134,27 +136,34 @@ int main() {
         else if (ALG_TYPE[i] == ::PR_noPREMP){
             runPRNoPreempScheduler(numOfProcesses, maxNumOfProcesses, copyOfTheOriginalProcesses);
         } else {
+            numOfProcesses = runPR_withPREEMPSchedulingAlg(numOfProcesses, maxNumOfProcesses, process);
+        }
+    }
 
 
-            numOfProcesses = 0;
-            int curTime = 0;
-            int total_time = 0;
-            int mum_of_iter = 0;
+    return 0;
+}
 
-            int prev_process = 0;
-            int current_process;
-            int *process_wait_time = new int[maxNumOfProcesses+2];
-            for(int i = 0; i < maxNumOfProcesses+2; i++){
+int runPR_withPREEMPSchedulingAlg(int numOfProcesses, int maxNumOfProcesses, const processInfo *process) {
+    numOfProcesses = 0;
+    int curTime = 0;
+    int total_time = 0;
+    int mum_of_iter = 0;
+
+    int prev_process = 0;
+    int current_process;
+    int *process_wait_time = new int[maxNumOfProcesses+2];
+    for(int i = 0; i < maxNumOfProcesses+2; i++){
                 process_wait_time[i]  = 0;
             }
 
-           // cout << "Max number of processes is: " << maxNumOfProcesses << endl;
-            priority_queue<processInfo*,vector<processInfo*>,function
+    // cout << "Max number of processes is: " << maxNumOfProcesses << endl;
+    priority_queue<processInfo*,vector<processInfo*>,function
                     <bool(const processInfo*,const processInfo*)>>
                     prQueuePR([](const processInfo* s1, const processInfo* s2)
                               {return s1->priority > s2->priority;});
 //TODO: When does it get preempted, every time or only if a next process' priority is higher?
-            while(numOfProcesses < maxNumOfProcesses){
+    while(numOfProcesses < maxNumOfProcesses){
                 prQueuePR.push((processInfo*)(&process[numOfProcesses]));
                 current_process = ((processInfo*)prQueuePR.top())->number;
                 if(numOfProcesses != maxNumOfProcesses - 1) {    // Don't compare the last element
@@ -191,7 +200,7 @@ int main() {
                 }
                 numOfProcesses++;
             }
-            while(!prQueuePR.empty()){
+    while(!prQueuePR.empty()){
                 processInfo *info = prQueuePR.top();    prQueuePR.pop();
                 //cout << curTime << " " << info->number << endl;
                 outf << "\t" << curTime << " " << info->number << endl;
@@ -208,25 +217,9 @@ int main() {
                 }
             }
 
-            //cout << "AVG Waiting Time: " << (float)total_time / maxNumOfProcesses << endl << endl << endl;
-            outf << "AVG Waiting Time: " << (float)total_time / maxNumOfProcesses << endl << endl << endl;
-        }
-    }
-
-
-
-
-
-
-
-
-
-    /*
-     * ifstream returns a 0 if we’ve reached the end of the file (EOF)
-     */
-
-
-    return 0;
+    //cout << "AVG Waiting Time: " << (float)total_time / maxNumOfProcesses << endl << endl << endl;
+    outf << "AVG Waiting Time: " << (float)total_time / maxNumOfProcesses << endl << endl << endl;
+    return numOfProcesses;
 }
 
 void printAlgorithmName(int algType) {
