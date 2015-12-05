@@ -117,13 +117,22 @@ int main() {
 
     for(int i = 0; i < 4; i++){
 
+        processInfo *copyOfTheOriginalProcesses = new processInfo [maxNumOfProcesses];
+        for(int i = 0; i < maxNumOfProcesses; i++){
+            copyOfTheOriginalProcesses[i].number        = process[i].number;
+            copyOfTheOriginalProcesses[i].timeArrive    = process[i].timeArrive;
+            copyOfTheOriginalProcesses[i].cpuBurst      = process[i].cpuBurst;
+            copyOfTheOriginalProcesses[i].priority      = process[i].priority;
+        }
+
+
         printAlgorithmName(ALG_TYPE[i]);
         if(ALG_TYPE[i] == ::SJF){
-        runSjfScheduler(numOfProcesses, maxNumOfProcesses, process);}
+        runSjfScheduler(numOfProcesses, maxNumOfProcesses, copyOfTheOriginalProcesses);}
         else if(ALG_TYPE[i] == ::RR) {
-            runRRScheduler(numOfProcesses, maxNumOfProcesses, process, timeQuantam); }
+            runRRScheduler(numOfProcesses, maxNumOfProcesses, copyOfTheOriginalProcesses, timeQuantam); }
         else if (ALG_TYPE[i] == ::PR_noPREMP){
-            runPRNoPreempScheduler(numOfProcesses, maxNumOfProcesses, process);
+            runPRNoPreempScheduler(numOfProcesses, maxNumOfProcesses, copyOfTheOriginalProcesses);
         } else {
 
 
@@ -259,7 +268,7 @@ void runPRNoPreempScheduler(int numOfProcesses, int maxNumOfProcesses, const pro
     while(!prQueuePR.empty()){
                 processInfo *info = prQueuePR.top();    prQueuePR.pop();
                 //cout << curTime << " " << info->number << endl;
-                total_time += curTime;
+                 total_time += curTime;
                 outf << "\t"   << curTime << " " << info->number << endl;
                 curTime += info->cpuBurst;
             }
