@@ -248,7 +248,8 @@ void runPRNoPreempScheduler(int numOfProcesses, int maxNumOfProcesses, const pro
                     if (process[numOfProcesses + 1].timeArrive > curTime) {
                         processInfo *info = prQueuePR.top();
                         prQueuePR.pop();
-                        //cout << curTime << " " << info->number << endl; total_time += curTime;
+                        //cout << curTime << " " << info->number << endl;
+                        total_time += curTime;
                         outf << "\t" << curTime << " " << info->number << endl;
                         curTime += info->cpuBurst;
                     }
@@ -257,7 +258,8 @@ void runPRNoPreempScheduler(int numOfProcesses, int maxNumOfProcesses, const pro
             }
     while(!prQueuePR.empty()){
                 processInfo *info = prQueuePR.top();    prQueuePR.pop();
-                //cout << curTime << " " << info->number << endl;  total_time += curTime;
+                //cout << curTime << " " << info->number << endl;
+                total_time += curTime;
                 outf << "\t"   << curTime << " " << info->number << endl;
                 curTime += info->cpuBurst;
             }
@@ -372,7 +374,8 @@ void runSjfScheduler(int numOfProcesses, int maxNumOfProcesses, const processInf
         }
     while(!prQueueSJF.empty()){
             processInfo *info = prQueueSJF.top();    prQueueSJF.pop();
-            //cout << curTime << " " << info->number << endl;  total_time += curTime;
+            //cout << curTime << " " << info->number << endl;
+            total_time += curTime;
             outf << "\t"  << curTime << " " << info->number << endl;
             curTime += info->cpuBurst;
 

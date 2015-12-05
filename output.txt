@@ -3,7 +3,7 @@ SJF
 	3 1
 	9 3
 	16 2
-AVG Waiting Time: 0
+AVG Waiting Time: 7
 
 
 RR
@@ -22,7 +22,7 @@ PR_noPREMP
 	2 2
 	6 4
 	9 3
-AVG Waiting Time: 0
+AVG Waiting Time: 4.25
 
 
 PR_withPREMP
