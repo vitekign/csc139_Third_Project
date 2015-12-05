@@ -43,7 +43,7 @@ int main() {
 
 
       if(!outf){
-          cerr << "Uh oh, output.txt could not be opened for writing!" << endl;
+          cerr << "output.txt could not be opened for writing!" << endl;
           cout << "error";
           exit(1);
       }
@@ -181,6 +181,8 @@ int runPR_withPREEMPSchedulingAlg(int numOfProcesses, int maxNumOfProcesses, con
                         curTime += info->cpuBurst; //total_time += curTime;
                         prQueuePR.pop();
                         mum_of_iter++;
+
+
 
                         if(prev_process != current_process) {
                             process_wait_time[current_process] =  curTime;
