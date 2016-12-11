@@ -2,6 +2,7 @@
 #include <sstream>
 #include <fstream>
 #include <queue>
+#include <list>
 
 using namespace std;
 
@@ -215,7 +216,9 @@ int run_PR_WITH_PREEM_schedulingAlg(int numOfProcesses, int maxNumOfProcesses, c
 
 void printAlgorithmName(int algType) {
     if (algType == SJF) {
-        outf << "SJF" << endl;
+        outf << "* * * * * * * * * * * * * *" << endl;
+        outf << "*   Shortest Job First    *" << endl;
+        outf << "* * * * * * * * * * * * * *" << endl << endl;
     } else if (algType == RR) {
         outf << "* * * * * * * * * * * * * *" << endl;
         outf << "*       Round Robin       * " << endl;
@@ -325,33 +328,35 @@ void run_RR_scheduler(int num_of_processes, int max_num_of_processes, const proc
 void run_SJF_scheduler(int seq_num_of_curr_process, int num_of_processes, const processInfo *process) {
     seq_num_of_curr_process = 0;
     int curr_time = 0;
-    int total_time = 0;
+    int total_time_waiting_time = 0;
 
     priority_queue<processInfo *, //Define an element
             vector<processInfo *>, //For Internal Use
             function<bool(const processInfo *, const processInfo *)>> //Comparator
-            prior_queue([](const processInfo *s1, const processInfo *s2) { return s1->cpuBurst > s2->cpuBurst; });
+            prior_queue_curr_processes([](const processInfo *s1, const processInfo *s2) { return s1->cpuBurst > s2->cpuBurst; });
 
-
+    //Add all processes to a list
+    list<processInfo *> all_processes;
     while (seq_num_of_curr_process < num_of_processes) {
-        prior_queue.push((processInfo *) (&process[seq_num_of_curr_process]));
-            if (process[seq_num_of_curr_process + 1].timeArrive > curr_time) {
-                processInfo *info = prior_queue.top();
-                prior_queue.pop();
-                outf << "\t" << curr_time << " " << info->number << endl;
-                curr_time += info->cpuBurst;
-        }
+        all_processes.push_back((processInfo*)(&process[seq_num_of_curr_process]));
         seq_num_of_curr_process++;
     }
-    while (!prior_queue.empty()) {
-        processInfo *info = prior_queue.top();
-        prior_queue.pop();
-        //cout << curr_time << " " << info->number << endl;
-        total_time += curr_time;
-        outf << "\t" << curr_time << " " << info->number << endl;
-        curr_time += info->cpuBurst;
 
+    list<processInfo*>::iterator iter;
+    while(!all_processes.empty()){
+        for(iter = all_processes.begin(); iter != all_processes.end(); ++iter){
+            if((*iter)->timeArrive <= curr_time){
+                prior_queue_curr_processes.push(*iter);
+                all_processes.erase(iter);
+            }
+        }
+        while(!prior_queue_curr_processes.empty()){
+            processInfo *info = prior_queue_curr_processes.top();
+            prior_queue_curr_processes.pop();
+            outf << "\t" << info->number << " : " << curr_time << endl;
+            total_time_waiting_time += curr_time;
+            curr_time += info->cpuBurst;
+        }
     }
-
-    outf << "Average waiting time: " << (float) total_time / num_of_processes << endl << endl << endl;
+    outf << "\nAverage waiting time: " << (float) total_time_waiting_time / num_of_processes << endl << endl << endl;
 }

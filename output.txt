@@ -1,8 +1,12 @@
-SJF
-	0 1
-	8 2
-	9 3
-	11 4
+* * * * * * * * * * * * * *
+*   Shortest Job First    *
+* * * * * * * * * * * * * *
+
+	1 : 0
+	2 : 8
+	3 : 9
+	4 : 11
+
 Average waiting time: 7
 
 
