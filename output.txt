@@ -1,6 +1,6 @@
-* * * * * * * * * * * * * *
-*   Shortest Job First    *
-* * * * * * * * * * * * * *
+* * * * * * * * * * * * * * * * * * 
+*  Shortest Job First Scheduling  *
+* * * * * * * * * * * * * * * * * * 
 
 	1 : 0
 	2 : 8
@@ -11,7 +11,7 @@ Average waiting time: 7
 
 
 * * * * * * * * * * * * * *
-*       Round Robin       * 
+* Round Robin Scheduling  * 
 * * * * * * * * * * * * * *
 
 	1 : 0
@@ -23,9 +23,9 @@ Average waiting time: 7
 Average waiting time: 5.25
 
 
-* * * * * * * * * * * * * * * * 
-* Priority without preemption * 
-* * * * * * * * * * * * * * * * 
+* * * * * * * * * * * * * * * * * * * * * * 
+* Priority without Preemption Scheduling  * 
+* * * * * * * * * * * * * * * * * * * * * * 
 
 	1 : 0
 	2 : 8
@@ -35,7 +35,10 @@ Average waiting time: 5.25
 Average waiting time: 7
 
 
-PR_WITH_PREEMP
+* * * * * * * * * * * * * * * * * * * * * 
+*  Priority with Preemption Scheduling  *
+* * * * * * * * * * * * * * * * * * * * * 
+
 	1 : 0
 	2 : 3
 	1 : 4

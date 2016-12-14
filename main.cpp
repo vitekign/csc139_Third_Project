@@ -52,7 +52,7 @@ int main() {
 
     ifstream inf("input.txt");
     if (!inf) {
-        cerr << "input.txt cound not be opened for reading!" << endl;
+        cerr << "input.txt could not be opened for reading!" << endl;
         exit(1);
     }
 
@@ -124,7 +124,6 @@ int main() {
             copyOfTheOriginalProcesses[i].priority = process[i].priority;
         }
 
-
         printAlgorithmName(ALG_TYPE[i]);
         if (ALG_TYPE[i] == ::SJF) {
             run_SJF_scheduler(numOfProcesses, maxNumOfProcesses, copyOfTheOriginalProcesses);
@@ -141,19 +140,21 @@ int main() {
 
 void printAlgorithmName(int algType) {
     if (algType == SJF) {
-        outf << "* * * * * * * * * * * * * *" << endl;
-        outf << "*   Shortest Job First    *" << endl;
-        outf << "* * * * * * * * * * * * * *" << endl << endl;
+        outf << "* * * * * * * * * * * * * * * * * * " << endl;
+        outf << "*  Shortest Job First Scheduling  *" << endl;
+        outf << "* * * * * * * * * * * * * * * * * * " << endl << endl;
     } else if (algType == RR) {
         outf << "* * * * * * * * * * * * * *" << endl;
-        outf << "*       Round Robin       * " << endl;
+        outf << "* Round Robin Scheduling  * " << endl;
         outf << "* * * * * * * * * * * * * *" << endl << endl;
     } else if (algType == PR_NO_PREEMP) {
-        outf << "* * * * * * * * * * * * * * * * " << endl;
-        outf << "* Priority without preemption * " << endl;
-        outf << "* * * * * * * * * * * * * * * * " << endl << endl;
+        outf << "* * * * * * * * * * * * * * * * * * * * * * " << endl;
+        outf << "* Priority without Preemption Scheduling  * " << endl;
+        outf << "* * * * * * * * * * * * * * * * * * * * * * " << endl << endl;
     } else if (algType == PR_WITH_PREEMP) {
-        outf << "PR_WITH_PREEMP" << endl;
+        outf << "* * * * * * * * * * * * * * * * * * * * * " << endl;
+        outf << "*  Priority with Preemption Scheduling  *" << endl;
+        outf << "* * * * * * * * * * * * * * * * * * * * * " << endl << endl;
     }
 }
 
